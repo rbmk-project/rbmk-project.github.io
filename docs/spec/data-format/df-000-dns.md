@@ -6,7 +6,7 @@
 | Last-Updated | 2024-11-18                                     |
 
 This document describes the format of DNS measurements emitted
-by [RBMK](https://github.com/rbmk-project/rbmk) and implemented by
+by [rbmk](https://github.com/rbmk-project/rbmk) and implemented by
 the [dnscore](https://github.com/rbmk-project/dnscore) library.
 
 
