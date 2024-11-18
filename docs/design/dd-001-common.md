@@ -17,6 +17,9 @@ should respect these criteria:
 
 2. well tested and well documented;
 
-3. useful across 3+ repositories.
+3. useful across 2+ repositories;
 
-Otherwise, it is just best to define libraries when they are needed.
+4. reasonably small.
+
+Otherwise, it is just best to define libraries when they are needed
+or to create new repositories for large libraries.
