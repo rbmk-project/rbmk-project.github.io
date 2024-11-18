@@ -6,9 +6,8 @@
 | Last-Updated | 2024-11-13                                     |
 
 This document describes the design of the [common](
-https://github.com/rbmk-project/common) library.
-
-We use several general purpose libraries across different
+https://github.com/rbmk-project/common) library collection,
+which contains several general purpose libraries reused across
 [rbmk](https://github.com/rbmk-project) repositories.
 
 A library added to [common](https://github.com/rbmk-project/common)
