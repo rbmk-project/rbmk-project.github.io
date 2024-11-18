@@ -1,4 +1,4 @@
-# RBMK Project WebSite
+# RBMK Project Website
 
-This repository contains the [RBMK Project WebSite](
+This repository contains the [RBMK Project Website](
 https://rbmk-project.github.io/) source code.
