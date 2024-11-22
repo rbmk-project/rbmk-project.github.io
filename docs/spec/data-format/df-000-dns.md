@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-11-18                                     |
+| Last-Updated | 2024-11-22                                     |
 
 This document describes the format of DNS measurements emitted
 by [rbmk](https://github.com/rbmk-project/rbmk) and implemented by
@@ -111,8 +111,10 @@ The JSON serialization of the response message contains
 ```JSON
 {
   "msg":"dnsResponse",
+  "localAddr": "",
   "rawQuery":"",
   "rawResponse":"",
+  "remoteAddr": "",
   "serverAddr":"",
   "serverProtocol":"",
   "t0":"",
@@ -125,11 +127,17 @@ Where:
 - `"msg"` (string) is the message type and is
 always equal to `"dnsQuery"`;
 
+- `"localAddr"` (string) local address and port
+of the socket we're using;
+
 - `"rawQuery"` (string) contains the
 raw DNS query in base64 encoding;
 
 - `"rawResponse"` (string) contains the
 raw DNS response in base64 encoding;
+
+- `"remoteAddr"` (string) remote address and port
+of the socket we're using;
 
 - `"serverAddr"` (string) is the address of the
 server, whose format depends on the protocol;
@@ -168,8 +176,10 @@ Here is an example of a `"dnsResponse"` message:
 ```JSON
 {
   "msg":"dnsResponse",
+  "localAddr": "130.192.91.211:32769",
   "rawQuery":"yHUBAAABAAAAAAABA3d3dwdleGFtcGxlA2NvbQAAAQABAAApBNAAAAAAAAA=",
   "rawResponse":"yHWBgAABAAEAAAABA3d3dwdleGFtcGxlA2NvbQAAAQABwAwAAQABAAANVAAEXbjXDgAAKQIAAAAAAAAA",
+  "remoteAddr": "8.8.8.8:53",
   "serverAddr":"8.8.8.8:53",
   "serverProtocol":"udp",
   "t0":"2024-11-18T15:31:53.05491+01:00",
