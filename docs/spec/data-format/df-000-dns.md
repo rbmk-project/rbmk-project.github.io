@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-11-22                                     |
+| Last-Updated | 2024-11-29                                     |
 
 This document describes the format of DNS measurements emitted
 by [rbmk](https://github.com/rbmk-project/rbmk) and implemented by
