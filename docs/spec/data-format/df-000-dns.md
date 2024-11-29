@@ -73,7 +73,7 @@ The JSON serialization of the query message contains
 ```JSON
 {
   "msg":"dnsQuery",
-  "rawQuery":"",
+  "dnsRawQuery":"",
   "serverAddr":"",
   "serverProtocol":"",
   "t":""
@@ -85,7 +85,7 @@ Where:
 - `"msg"` (string) is the message type and is
 always equal to `"dnsQuery"`;
 
-- `"rawQuery"` (base64 string) contains the
+- `"dnsRawQuery"` (base64 string) contains the
 raw DNS query in base64 encoding;
 
 - `"serverAddr"` (string) is the address of the
@@ -112,8 +112,8 @@ The JSON serialization of the response message contains
 {
   "msg":"dnsResponse",
   "localAddr": "",
-  "rawQuery":"",
-  "rawResponse":"",
+  "dnsRawQuery":"",
+  "dnsRawResponse":"",
   "remoteAddr": "",
   "serverAddr":"",
   "serverProtocol":"",
@@ -130,10 +130,10 @@ always equal to `"dnsQuery"`;
 - `"localAddr"` (string) local address and port
 of the socket we're using;
 
-- `"rawQuery"` (string) contains the
+- `"dnsRawQuery"` (string) contains the
 raw DNS query in base64 encoding;
 
-- `"rawResponse"` (string) contains the
+- `"dnsRawResponse"` (string) contains the
 raw DNS response in base64 encoding;
 
 - `"remoteAddr"` (string) remote address and port
@@ -164,7 +164,7 @@ Here is an example of a `"dnsQuery"` message:
 ```JSON
 {
   "msg":"dnsQuery",
-  "rawQuery":"yHUBAAABAAAAAAABA3d3dwdleGFtcGxlA2NvbQAAAQABAAApBNAAAAAAAAA=",
+  "dnsRawQuery":"yHUBAAABAAAAAAABA3d3dwdleGFtcGxlA2NvbQAAAQABAAApBNAAAAAAAAA=",
   "serverAddr":"8.8.8.8:53",
   "serverProtocol":"udp",
   "t":"2024-11-18T15:31:53.05491+01:00",
@@ -177,8 +177,8 @@ Here is an example of a `"dnsResponse"` message:
 {
   "msg":"dnsResponse",
   "localAddr": "130.192.91.211:32769",
-  "rawQuery":"yHUBAAABAAAAAAABA3d3dwdleGFtcGxlA2NvbQAAAQABAAApBNAAAAAAAAA=",
-  "rawResponse":"yHWBgAABAAEAAAABA3d3dwdleGFtcGxlA2NvbQAAAQABwAwAAQABAAANVAAEXbjXDgAAKQIAAAAAAAAA",
+  "dnsRawQuery":"yHUBAAABAAAAAAABA3d3dwdleGFtcGxlA2NvbQAAAQABAAApBNAAAAAAAAA=",
+  "dnsRawResponse":"yHWBgAABAAEAAAABA3d3dwdleGFtcGxlA2NvbQAAAQABwAwAAQABAAANVAAEXbjXDgAAKQIAAAAAAAAA",
   "remoteAddr": "8.8.8.8:53",
   "serverAddr":"8.8.8.8:53",
   "serverProtocol":"udp",
