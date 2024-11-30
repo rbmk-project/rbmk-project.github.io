@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-11-29                                     |
+| Last-Updated | 2024-11-30                                     |
 
 This document describes the format of DNS measurements emitted
 by [rbmk](https://github.com/rbmk-project/rbmk) and implemented by
@@ -76,7 +76,8 @@ The JSON serialization of the query message contains
   "dnsRawQuery":"",
   "serverAddr":"",
   "serverProtocol":"",
-  "t":""
+  "t":"",
+  "protocol": ""
 }
 ```
 
@@ -95,7 +96,9 @@ server, whose format depends on the protocol;
 are using for the query;
 
 - `"t"` (string) is the RFC3339 representation
-of the time right before sending the query.
+of the time right before sending the query;
+
+- `"protocol"` (string) is the network protocol we use (e.g., "tcp").
 
 The current [dnscore](https://github.com/rbmk-project/dnscore)
 implementation uses [log/slog](https://pkg.go.dev/log/slog), which
@@ -118,7 +121,8 @@ The JSON serialization of the response message contains
   "serverAddr":"",
   "serverProtocol":"",
   "t0":"",
-  "t":""
+  "t":"",
+  "protocol": ""
 }
 ```
 
@@ -149,7 +153,9 @@ are using for the query;
 the time right before sending the query;
 
 - `"t"` (string) is the RFC3339 representation
-of the time when the response was received.
+of the time when the response was received;
+
+- `"protocol"` (string) is the network protocol we use (e.g., "tcp").
 
 The current [dnscore](https://github.com/rbmk-project/dnscore)
 implementation uses [log/slog](https://pkg.go.dev/log/slog), which
@@ -168,6 +174,7 @@ Here is an example of a `"dnsQuery"` message:
   "serverAddr":"8.8.8.8:53",
   "serverProtocol":"udp",
   "t":"2024-11-18T15:31:53.05491+01:00",
+  "protocol": "udp"
 }
 ```
 
@@ -183,6 +190,7 @@ Here is an example of a `"dnsResponse"` message:
   "serverAddr":"8.8.8.8:53",
   "serverProtocol":"udp",
   "t0":"2024-11-18T15:31:53.05491+01:00",
-  "t":"2024-11-18T15:31:53.072107+01:00"
+  "t":"2024-11-18T15:31:53.072107+01:00",
+  "protocol": "udp"
 }
 ```
