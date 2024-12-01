@@ -71,7 +71,13 @@ commented scripts, to facilitate inspection.
 Generating measurement script:
 
 ```bash
-./scripts/check-https -i example.com > measure.sh
+./Workspace/scripts/check-https -i example.com > ./Workspace/measure.sh
+```
+
+Copying the script to a remote machine:
+
+```bash
+scp ./Workspace/measure.sh user@remote:
 ```
 
 Running the script on Unix:
@@ -98,7 +104,7 @@ quickly on updating and re-running the measurement scripts.
 ## Design Choices
 
 1. Shell Interpreter
-- Use `mvdan/sh` for portable, consistent behavior
+- Use `mvdan.cc/sh` for portable, consistent behavior
 - Provide `RBMK_EXE` environment variable so that a script can
 invoke `rbmk` subcommands
 
@@ -134,4 +140,4 @@ invoke `rbmk` subcommands
 ## References
 
 1. [RBMK Core Design](dd-005-rbmk.md)
-2. [mvdan/sh Documentation](https://pkg.go.dev/mvdan.cc/sh/v3)
+2. [mvdan.cc/sh/v3 Documentation](https://pkg.go.dev/mvdan.cc/sh/v3)
