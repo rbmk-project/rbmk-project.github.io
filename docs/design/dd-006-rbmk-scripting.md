@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-12-01                                     |
+| Last-Updated | 2024-12-02                                     |
 
 This document describes the scripting support design
 for RBMK, which builds on top of the core functionality
@@ -30,6 +30,7 @@ We extend RBMK with Unix-like commands to support scripting:
 
 - `rbmk sh`: POSIX shell interpreter with `RBMK_EXE` environment variable
 - `rbmk mkdir`: Create directories
+- `rbmk mv`: Move (rename) files and directories
 - `rbmk rm`: Remove files and directories
 - `rbmk tar`: Create and compress TAR archives
 - `rbmk cat`: Concatenate files
