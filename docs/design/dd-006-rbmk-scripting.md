@@ -77,7 +77,8 @@ Windows (where `rbmk.exe sh` provides the shell environment).
 
 ## Data Management
 
-Scripts should use relative paths for data management:
+Scripts should use relative paths for data management. For example:
+
 ```bash
 ./results/      # measurement results
 ./logs/         # structured logs
