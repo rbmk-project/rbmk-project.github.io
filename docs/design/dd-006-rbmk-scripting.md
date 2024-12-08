@@ -95,7 +95,7 @@ invoke `rbmk` subcommands
 
 2. Script Generation
 - Python (or other scripting languages) for generation logic
-- Build-in shell for execution
+- Built-in shell for execution
 - Clear separation of roles
 
 3. Unix-like Commands
