@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-11-30                                     |
+| Last-Updated | 2024-12-08                                     |
 
 This document describes the design of the [rbmk](
 https://github.com/rbmk-project/rbmk) repository, which
@@ -13,9 +13,16 @@ contains the `rbmk` command implementation.
 ## Overview
 
 The `rbmk` command is a simple command line tool used
-to perform network measurements. We implement two toplevel
-core commands, `rbmk dig`, emulating a subset of `dig(1)`,
-and `rbmk curl`, emulating a subset of `curl(1)`.
+to perform network measurements. We implement three toplevel
+core commands:
+
+- `rbmk dig`, emulating a subset of `dig(1)` to perform
+DNS network measurements;
+
+-  `rbmk curl`, emulating a subset of `curl(1)` to
+perform HTTP/HTTPS network measurements;
+
+- `rbmk stun`, to resolve the public IP addresses.
 
 
 ## Core Commands
@@ -39,7 +46,7 @@ All commands will implement these help facilities:
 
 - `rbmk [command] -h`
 
-- `rbmk [command] help`
+- `rbmk help [command]`
 
 These invocations will all print a detailed usage message.
 
@@ -65,11 +72,16 @@ Commands will follow these principles for errors:
 
 - Consistent error formatting across commands.
 
+The `--logs -` flag will write structured logs to stdout.
+
+The `--measure` flag will prevent measurement errors (e.g., I/O
+timeouts) from causing the program to exit with a non-zero status.
+
 ### rbmk dig
 
 *Purpose*: perform and measure DNS lookups.
 
-*Usage*: `rbmk dig [-flags] [@SERVER] DOMAIN [TYPE] [+flags]`
+*Usage*: `rbmk dig [flags] [@SERVER] DOMAIN [TYPE] [options]`
 
 The command line syntax is similar to the `dig` command, with some
 RBMK specific additions, such as `--logs FILE` to specify where
@@ -86,6 +98,12 @@ quite closely, without pedentically being a clone.
 - Mimic dig output and behavior.
 
 - Possibility to collect structured logs.
+
+*Invocation Example*:
+
+```console
+rbmk dig --logs dig.jsonl www.example.com A +short
+```
 
 *Structured Logs Example*:
 
@@ -118,7 +136,7 @@ quite closely, without pedentically being a clone.
 
 *Purpose*: measure HTTP/HTTPS endpoints.
 
-*Usage*: `rbmk curl [-flags] URL`
+*Usage*: `rbmk curl [flags] URL`
 
 The command line syntax is similar to the `curl` command, with some
 RBMK specific additions, such as `--logs FILE` to specify where
@@ -138,6 +156,12 @@ that is also implemented by `curl` and allows for composing
 - Mimic curl output and behavior.
 
 - Possibility to collect structured logs.
+
+*Invocation Example*:
+
+```console
+rbmk curl --logs curl.jsonl https://www.example.com/
+```
 
 *Structured Logs Example*:
 
@@ -170,10 +194,45 @@ that is also implemented by `curl` and allows for composing
 // ...
 ```
 
+### rbmk stun
+
+*Purpose*: resolve the public IP addresses.
+
+*Usage*: `rbmk stun [flags] ENDPOINT`
+
+The command syntax is not similar to any existing command and
+is unique and specific to the `rbmk` tool.
+
+*Output*: the command primary output consists of the address
+of the public UDP endpoint that contacted the STUN server, thus
+showing the public IP address of the machine.
+
+*Key Features*:
+
+- Possibility to collect structured logs.
+
+*Invocation Example*:
+
+```console
+rbmk stun --logs - 74.125.250.129:19302
+```
+
+*Structured Logs Example*:
+
+```JavaScript
+// ...
+{
+  "msg":"stunReflexiveAddress",
+  "stunReflexiveIPAddr":"192.0.2.1",
+  "stunReflexivePort":64986
+}
+// ...
+```
+
 ## Command Composition
 
-It should be possible to compose `rbmk dig` and `rbmk curl`
-together as illustrated by the following session example:
+It should be possible to compose `rbmk dig`, `rbmk curl`, and
+`rbmk stun` together as illustrated by the following session example:
 
 ```console
 % rbmk dig +short --logs dig.jsonl www.example.com A
@@ -191,6 +250,9 @@ addresses and `--resolve` allows to focus on a specific
 endpoint to measure, thus implementing "step by step"
 measurements (i.e., measurements where each operation that
 may fail is executed independently).
+
+See [dd-006-rbmk-scripting](dd-006-rbmk-scripting.md) for
+more information about the scripting extensions.
 
 ## Implementation Approach
 
@@ -213,6 +275,9 @@ and the specific "task" that executes the command itself.
 - `pkg/cli/curl` will expose the `main` of the `rbmk curl` command
 and the specific "task" that executes the command itself.
 
+- `pkg/cli/stun` will expose the `main` of the `rbmk stun` command
+and the specific "task" that executes the command itself.
+
 A "task" is a structure named `Task` with public fields that one
 can set, which implements a `Run` method that executes the specified
 command and return an error (or `nil` on success). For example:
@@ -224,7 +289,7 @@ type Task struct {
   Resolve    []string  // --resolve entries
 }
 
-func (t *Task) Run() error {
+func (t *Task) Run(/* ... */) error {
   // Implementation
 }
 ```
@@ -254,6 +319,8 @@ More specifically, we consider core:
 - The DNS lookup functionality.
 
 - The HTTP/HTTPS endpoint measurement functionality.
+
+- The STUN client functionality.
 
 - Emitting structured logs.
 

@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-12-02                                     |
+| Last-Updated | 2024-12-08                                     |
 
 This document describes the scripting support design
 for RBMK, which builds on top of the core functionality
@@ -12,85 +12,52 @@ described in [dd-005-rbmk.md](dd-005-rbmk.md).
 ## Overview
 
 RBMK scripting support enables defining measurement
-algorithms as shell scripts. The `rbmk` tool provides
-Unix-like commands and a POSIX shell interpreter
-that work consistently across platforms, including Windows.
+algorithms as shell scripts, with focus on remote deployment
+and minimal dependencies.
 
 ## Core Principles
 
 1. Scripts are the primary way to define measurement algorithms
-2. Consistent behavior across platforms
-3. Self-contained minimal-shell execution environment
-4. Clear working directory conventions
-5. Simple data management
+2. Scripts should be self-contained and portable
+3. Minimal dependencies (just rbmk binary + script)
+4. POSIX shell compatibility across platforms
 
 ## Command Set
 
 We extend RBMK with Unix-like commands to support scripting:
 
-- `rbmk sh`: POSIX shell interpreter with `RBMK_EXE` environment variable
+- `rbmk cat`: Concatenate files
+- `rbmk ipuniq`: Sort, deduplicate, and format IP addresses
 - `rbmk mkdir`: Create directories
 - `rbmk mv`: Move (rename) files and directories
+- `rbmk pipe`: Create named pipes for inter-process communication
 - `rbmk rm`: Remove files and directories
+- `rbmk sh`: POSIX shell interpreter with `RBMK_EXE` environment variable
 - `rbmk tar`: Create and compress TAR archives
-- `rbmk cat`: Concatenate files
 - `rbmk timestamp`: Generate filesystem-friendly timestamps
-- `rbmk ipuniq`: Sort and format IP addresses
 
 These commands work consistently across operating systems and handle
 platform-specific details (e.g., path separators).
 
-## Working Directory
+## Remote Measurement Workflow
 
-By default, scripts running from the `rbmk` repository should save
-measurement results inside the `Workspace` directory of the
-repository, which conceptually provides:
+1. Generate measurement script locally
+2. Copy script and `rbmk` binary to target machine
+3. Execute measurement (e.g., `./rbmk sh script.bash`)
+4. Retrieve results
 
-- Consistent relative paths
-- Separation between the `rbmk` source code and data
-- Clarity about where results are stored
-- Support for multiple concurrent measurements
-
-A future version of this design document will further specify the
-organization of the `Workspace` directory.
-
-## Script Generation
-
-Complex measurements are defined through Python scripts
-that generate POSIX shell scripts. This approach:
-
-1. Separates measurement definition from execution
-2. Makes measurement steps explicit
-3. Supports different execution environments
-4. Allows shell-script inspection before running
-
-The generators should strive to emit correctly indented and
-commented scripts, to facilitate inspection.
-
-## Usage Examples
-
-Generating measurement script:
+Example:
 
 ```bash
-./Workspace/scripts/check-https -i example.com > ./Workspace/measure.sh
-```
+# Generate measurement script using your custom script generator
+./your/custom/script/generator -i example.com >measure.sh
 
-Copying the script to a remote machine:
+# Copy rbmk and script to remote machine
+scp rbmk measure.sh user@remote:
 
-```bash
-scp ./Workspace/measure.sh user@remote:
-```
-
-Running the script on Unix:
-
-```bash
+# Execute script remotely
+ssh -v user@remote
 ./rbmk sh measure.sh
-```
-
-Running the script on Windows:
-
-```cmd
-rbmk.exe sh measure.sh
 ```
 
 The separation between generation and execution allows for more
@@ -102,6 +69,23 @@ occupy much less bandwidth than the `rbmk` binary itself or
 the measurement data. As a result, it will be possible to iterate
 quickly on updating and re-running the measurement scripts.
 
+## Script Execution
+
+The rbmk binary provides a POSIX shell through `rbmk sh`,
+ensuring consistent script behavior across platforms including
+Windows (where `rbmk.exe sh` provides the shell environment).
+
+## Data Management
+
+Scripts should use relative paths for data management. For example:
+
+```bash
+./results/      # measurement results
+./logs/         # structured logs
+```
+
+This ensures consistency across different execution environments.
+
 ## Design Choices
 
 1. Shell Interpreter
@@ -109,16 +93,12 @@ quickly on updating and re-running the measurement scripts.
 - Provide `RBMK_EXE` environment variable so that a script can
 invoke `rbmk` subcommands
 
-2. Working Directory
-- Clear separation of concerns
-- Fixed structure
-
-3. Script Generation
-- Python for complex logic
-- Shell for execution
+2. Script Generation
+- Python (or other scripting languages) for generation logic
+- Built-in shell for execution
 - Clear separation of roles
 
-4. Unix-like Commands
+3. Unix-like Commands
 - Minimal but complete set
 - Platform-independent behavior
 - Focus on measurement needs
