@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-12-08                                     |
+| Last-Updated | 2024-12-09                                     |
 
 This document describes the design of the [rbmk](
 https://github.com/rbmk-project/rbmk) repository, which
@@ -21,6 +21,9 @@ DNS network measurements;
 
 -  `rbmk curl`, emulating a subset of `curl(1)` to
 perform HTTP/HTTPS network measurements;
+
+- `rbmk nc`, emulating a subset of `nc(1)` to perform
+TCP and TLS endpoint measurements;
 
 - `rbmk stun`, to resolve the public IP addresses.
 
@@ -194,6 +197,28 @@ rbmk curl --logs curl.jsonl https://www.example.com/
 // ...
 ```
 
+### rbmk nc
+
+*Purpose*: measure TCP/TLS endpoints.
+
+*Usage*: `rbmk nc [flags] HOST PORT`
+
+The command line syntax is similar to the OpenBSD `nc(1)` command,
+with some RBMK specific additions, such as `--logs FILE` to specify
+where to the write structured logs.
+
+*Key Features*:
+
+- Support for TCP and TLS.
+
+- Possibility to collect structured logs.
+
+*Invocation Example*:
+
+```console
+rbmk nc --logs curl.jsonl 93.184.215.14 80
+```
+
 ### rbmk stun
 
 *Purpose*: resolve the public IP addresses.
@@ -231,7 +256,7 @@ rbmk stun --logs - 74.125.250.129:19302
 
 ## Command Composition
 
-It should be possible to compose `rbmk dig`, `rbmk curl`, and
+It should be possible to compose `rbmk dig`, `rbmk curl`, `rbmk nc` and
 `rbmk stun` together as illustrated by the following session example:
 
 ```console
@@ -273,6 +298,9 @@ more complex tools using `rbmk` as a library. Namely:
 and the specific "task" that executes the command itself.
 
 - `pkg/cli/curl` will expose the `main` of the `rbmk curl` command
+and the specific "task" that executes the command itself.
+
+- `pkg/cli/nc` will expose the `main` of the `rbmk nc` command
 and the specific "task" that executes the command itself.
 
 - `pkg/cli/stun` will expose the `main` of the `rbmk stun` command
@@ -319,6 +347,8 @@ More specifically, we consider core:
 - The DNS lookup functionality.
 
 - The HTTP/HTTPS endpoint measurement functionality.
+
+- The `nc` functionality.
 
 - The STUN client functionality.
 
