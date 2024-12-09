@@ -216,7 +216,7 @@ where to the write structured logs.
 *Invocation Example*:
 
 ```console
-rbmk nc --logs curl.jsonl 93.184.215.14 80
+rbmk nc --logs curl.jsonl -z 93.184.215.14 80
 ```
 
 ### rbmk stun
