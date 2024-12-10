@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-12-08                                     |
+| Last-Updated | 2024-12-10                                     |
 
 This document describes the scripting support design
 for RBMK, which builds on top of the core functionality
@@ -71,9 +71,47 @@ quickly on updating and re-running the measurement scripts.
 
 ## Script Execution
 
-The rbmk binary provides a POSIX shell through `rbmk sh`,
-ensuring consistent script behavior across platforms including
-Windows (where `rbmk.exe sh` provides the shell environment).
+## Script Execution
+
+The `rbmk` binary provides a POSIX shell through `rbmk sh` that guarantees
+script portability across different operating systems. Key features:
+
+1. **Restricted Command Set**
+
+- Only `rbmk` commands are available within scripts as built-in commands
+- External commands cannot be executed
+- All core measurement and Unix-like operations are provided through `rbmk` subcommands
+
+2. **Consistent Behavior**
+
+- Scripts work identically on Unix-like systems and Windows
+- Environment differences are abstracted away
+
+3. **Development Workflow**
+
+- Scripts can be developed and tested locally
+- Deploy to any system without modification
+- No dependency on external tools
+- No surprises when running in different environments
+
+Example script showing the contained environment:
+
+```bash
+#!/bin/sh
+# This script will work identically everywhere using `./rbmk sh`
+timestamp=$(rbmk timestamp)
+rbmk mkdir -p "$timestamp"
+rbmk dig +short=ip example.com > "$timestamp/addrs.txt"
+rbmk tar -czf "results_$timestamp.tar.gz" "$timestamp"
+rbmk rm -rf "$timestamp"
+```
+
+The restriction to `rbmk` commands ensures that scripts:
+
+1. Are truly portable across systems
+2. Have predictable behavior
+3. Can be tested once and deployed anywhere
+4. Don't break due to missing or different external tools
 
 ## Data Management
 
