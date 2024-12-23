@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-12-21                                     |
+| Last-Updated | 2024-12-23                                     |
 
 This document describes the scripting support design
 for RBMK, which builds on top of the core functionality
@@ -27,8 +27,9 @@ and minimal dependencies.
 We extend RBMK with Unix-like commands to support scripting:
 
 - `rbmk cat`: Concatenate files
-- `rbmk head`: Print first lines of files.
+- `rbmk head`: Print first lines of files
 - `rbmk ipuniq`: Sort, deduplicate, and format IP addresses
+- `rbmk markdown`: Renders Markdown to console
 - `rbmk mkdir`: Create directories
 - `rbmk mv`: Move (rename) files and directories
 - `rbmk pipe`: Create named pipes for inter-process communication
