@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-11-13                                     |
+| Last-Updated | 2025-03-09                                     |
 
 This document describes the design of the [dnscore](
 https://github.com/rbmk-project/dnscore) library.
@@ -13,7 +13,7 @@ https://github.com/rbmk-project/dnscore) library.
 `dnscore` is a Go library designed for performing DNS measurements. Its high-level
 API, `*dnscore.Resolver`, is compatible with `*net.Resolver`. Its low-level API,
 `*dnscore.Transport`, provides granular control over performing DNS queries using
-specific protocols (including UDP, TCP, TLS, and HTTPS).
+specific protocols (including UDP, TCP, TLS, HTTPS, and QUIC).
 
 ## Architecture
 
