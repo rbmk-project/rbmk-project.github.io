@@ -3,7 +3,7 @@
 |              |                                                |
 |--------------|------------------------------------------------|
 | Author       | [@bassosimone](https://github.com/bassosimone) |
-| Last-Updated | 2024-11-30                                     |
+| Last-Updated | 2025-03-09                                     |
 
 This document describes the format of DNS measurements emitted
 by [rbmk](https://github.com/rbmk-project/rbmk) and implemented by
@@ -48,7 +48,9 @@ The protocol is an enumeration string with the following values:
 
 - `"doh"` for DNS over HTTPS.
 
-For `"udp"`, `"tcp"`, and `"dot"`, the address is a string
+- `"doq"` for DNS over QUIC.
+
+For `"udp"`, `"tcp"`, `"dot"`, and `"doq"` the address is a string
 containing an IP address and a port separated by `":"`. When
 the address is and IPv6 address, it is enclosed in square
 brackets. The following are valid addresses:
@@ -93,12 +95,12 @@ raw DNS query in base64 encoding;
 server, whose format depends on the protocol;
 
 - `"serverProtocol"` (string) is the DNS protocol we
-are using for the query;
+are using for the query (e.g., `"dot"`, `"doq"`);
 
 - `"t"` (string) is the RFC3339 representation
 of the time right before sending the query;
 
-- `"protocol"` (string) is the network protocol we use (e.g., "tcp").
+- `"protocol"` (string) is the network protocol we use (e.g., `"tcp"`, `"udp"`).
 
 The current [dnscore](https://github.com/rbmk-project/dnscore)
 implementation uses [log/slog](https://pkg.go.dev/log/slog), which
@@ -147,7 +149,7 @@ of the socket we're using;
 server, whose format depends on the protocol;
 
 - `"serverProtocol"` (string) is the DNS protocol we
-are using for the query;
+are using for the query (e.g., `"dot"`, `"doq"`);
 
 - `"t0"` (string) is the RFC3339 representation of
 the time right before sending the query;
@@ -155,7 +157,7 @@ the time right before sending the query;
 - `"t"` (string) is the RFC3339 representation
 of the time when the response was received;
 
-- `"protocol"` (string) is the network protocol we use (e.g., "tcp").
+- `"protocol"` (string) is the network protocol we use (e.g., `"tcp"`, `"udp"`).
 
 The current [dnscore](https://github.com/rbmk-project/dnscore)
 implementation uses [log/slog](https://pkg.go.dev/log/slog), which
